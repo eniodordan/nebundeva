@@ -9,55 +9,92 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<TextEditingController> _controllers = [];
-  int _count = 1;
-
-  @override
-  void dispose() {
-    for (int i = 0; i < _controllers.length; i++) {
-      _controllers[i].dispose();
-    }
-
-    super.dispose();
-  }
+  List<bool> isVisible = [true, false, false, false];
+  List<String> players = ['', '', '', ''];
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _children = new List.generate(_count, (int i) {
-      _controllers.add(TextEditingController());
-      return PlayerTextField(controller: _controllers.last);
-    });
-
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _children,
-            ),
-            TextButton(
-              onPressed: () {
-                for (int i = 0; i < _controllers.length; i++) {
-                  print(_controllers[i].text);
-                }
-              },
-              child: Text('Debug'),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: _addPlayerTextField,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '(NE)BUNDEVA',
+                style: TextStyle(
+                  fontSize: 21.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Column(
+                children: [
+                  Text(
+                    'TKO IGRA?',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  SizedBox(height: 25),
+                  PlayerTextField(
+                    fieldId: 0,
+                    isVisible: isVisible[0],
+                    onChanged: (text) {
+                      players[0] = text;
+                      setState(() {
+                        if (!isVisible[1]) {
+                          isVisible[1] = true;
+                        }
+                      });
+                    },
+                  ),
+                  PlayerTextField(
+                    fieldId: 1,
+                    isVisible: isVisible[1],
+                    onChanged: (text) {
+                      players[1] = text;
+                      setState(() {
+                        if (!isVisible[2]) {
+                          isVisible[2] = true;
+                        }
+                      });
+                    },
+                  ),
+                  PlayerTextField(
+                    fieldId: 2,
+                    isVisible: isVisible[2],
+                    onChanged: (text) {
+                      players[2] = text;
+                      setState(() {
+                        if (!isVisible[3]) {
+                          isVisible[3] = true;
+                        }
+                      });
+                    },
+                  ),
+                  PlayerTextField(
+                    fieldId: 3,
+                    isVisible: isVisible[3],
+                    onChanged: (text) {
+                      players[3] = text;
+                    },
+                  ),
+                ],
+              ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  child: Text('Kreni'),
+                  onPressed: () {
+                    print(players);
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  void _addPlayerTextField() {
-    setState(() {
-      _count++;
-    });
   }
 }

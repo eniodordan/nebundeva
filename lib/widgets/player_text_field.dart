@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
 
 class PlayerTextField extends StatelessWidget {
-  final TextEditingController controller;
+  final int fieldId;
+  final bool isVisible;
+  final Function(String) onChanged;
 
-  PlayerTextField({required this.controller});
+  PlayerTextField({
+    required this.fieldId,
+    required this.isVisible,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(controller: controller);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Visibility(
+        visible: isVisible,
+        child: TextField(
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: 'Ime #${fieldId + 1}',
+          ),
+          onChanged: onChanged,
+        ),
+      ),
+    );
   }
 }
