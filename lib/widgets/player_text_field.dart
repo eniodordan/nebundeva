@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:nebundeva/constants.dart';
 
 class PlayerTextField extends StatelessWidget {
-  final int fieldId;
-  final bool isVisible;
-  final Function(String) onChanged;
-
-  PlayerTextField({
-    required this.fieldId,
-    required this.isVisible,
-    required this.onChanged,
-  });
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Visibility(
-        visible: isVisible,
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: Container(
+        height: 60,
         child: TextField(
-          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 24),
+          cursorColor: Colors.white,
           decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Ime #${fieldId + 1}',
+            filled: true,
+            fillColor: kDarkGreyColour,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none,
+            ),
           ),
-          onChanged: onChanged,
         ),
       ),
     );
