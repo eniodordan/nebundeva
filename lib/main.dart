@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:nebundeva/models/game_data.dart';
 import 'package:nebundeva/screens/home_screen.dart';
 import 'package:nebundeva/screens/mode_screen.dart';
+import 'package:nebundeva/screens/game_screen.dart';
+import 'package:nebundeva/screens/scoreboard_screen.dart';
+import 'package:nebundeva/screens/bus_screen.dart';
 
 void main() {
   runApp(Nebundeva());
@@ -28,6 +31,9 @@ class Nebundeva extends StatelessWidget {
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
           ModeScreen.id: (context) => ModeScreen(),
+          GameScreen.id: (context) => GameScreen(),
+          ScoreboardScreen.id: (context) => ScoreboardScreen(),
+          BusScreen.id: (context) => BusScreen(),
         },
       ),
     );

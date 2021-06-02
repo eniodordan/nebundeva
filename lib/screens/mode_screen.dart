@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nebundeva/constants.dart';
-import 'package:nebundeva/widgets/mode_tile.dart';
+
+import 'package:nebundeva/screens/game_screen.dart';
 
 class ModeScreen extends StatelessWidget {
   static const String id = 'mode_screen';
@@ -10,70 +11,95 @@ class ModeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(50),
+          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 25),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
-                child: Text(
-                  'Odaberi način:',
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 32,
+                      color: kGreyColour,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                ),
+                  Text(
+                    'Odaberi način',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: kGreyColour,
+                    ),
+                  ),
+                  Container(width: 32),
+                ],
               ),
+              SizedBox(height: 50),
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Column(
-                    children: [
-                      ModeTile(
-                        tileLabel: 'BUNDEVA',
-                        tileColour: kGreenColour,
-                        onPressed: () {},
-                      ),
-                      ModeTile(
-                        tileLabel: '(NE) BUNDEVA',
-                        tileColour: kRedColour,
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 100,
-                width: double.infinity,
-                color: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      ),
+                    ModeButton(
+                      tileLabel: 'BUNDEVA',
+                      tileColour: kGreenColour,
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.popAndPushNamed(context, GameScreen.id);
                       },
                     ),
-                    Text(
-                      '4 igrača',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
+                    ModeButton(
+                      tileLabel: '(NE) BUNDEVA',
+                      tileColour: kRedColour,
+                      onPressed: () {},
                     ),
-                    Container(width: 50),
                   ],
                 ),
-              )
+              ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ModeButton extends StatelessWidget {
+  final String tileLabel;
+  final Color tileColour;
+  final VoidCallback onPressed;
+
+  ModeButton(
+      {required this.tileLabel,
+      required this.tileColour,
+      required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Container(
+          width: double.infinity,
+          child: ElevatedButton(
+            child: SizedBox.expand(
+              child: Padding(
+                padding: EdgeInsets.only(left: 25, top: 25),
+                child: Text(
+                  tileLabel,
+                  style: TextStyle(fontSize: 36),
+                ),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: tileColour,
+              padding: EdgeInsets.all(0),
+              shape: new RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: onPressed,
           ),
         ),
       ),
