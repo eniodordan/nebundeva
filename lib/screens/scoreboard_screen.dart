@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
+
+import 'package:nebundeva/models/player.dart';
+import 'package:nebundeva/models/nebundeva_model.dart';
 
 class ScoreboardScreen extends StatefulWidget {
   static const String id = 'scoreboard_screen';
@@ -56,10 +60,19 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                             ),
                           ],
                         ),
-                        ScoreboardTile(isFirst: true),
-                        ScoreboardTile(isFirst: false),
-                        ScoreboardTile(isFirst: false),
-                        ScoreboardTile(isFirst: false),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: Provider.of<NebundevaModel>(context)
+                              .players
+                              .length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ScoreboardTile(
+                                isFirst: index == 0 ? true : false,
+                                player: Provider.of<NebundevaModel>(context)
+                                    .players[index]);
+                          },
+                        ),
                       ],
                     ),
                   ],
@@ -76,8 +89,9 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
 
 class ScoreboardTile extends StatelessWidget {
   final bool isFirst;
+  final Player player;
 
-  ScoreboardTile({required this.isFirst});
+  ScoreboardTile({required this.isFirst, required this.player});
 
   @override
   Widget build(BuildContext context) {
@@ -93,14 +107,14 @@ class ScoreboardTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Enio',
+              player.playerName,
               style: TextStyle(
                 fontSize: 24,
                 color: isFirst ? kRedColour : Colors.white,
               ),
             ),
             Text(
-              '4',
+              '${player.bellsNumber}',
               style: TextStyle(
                 fontSize: 24,
                 color: isFirst ? kRedColour : Colors.white,

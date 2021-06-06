@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:nebundeva/models/nebundeva_model.dart';
 import 'package:nebundeva/screens/game_screen.dart';
 
 class ModeScreen extends StatelessWidget {
@@ -46,13 +48,23 @@ class ModeScreen extends StatelessWidget {
                       tileLabel: 'BUNDEVA',
                       tileColour: kGreenColour,
                       onPressed: () {
+                        Provider.of<NebundevaModel>(context, listen: false)
+                            .initializeGameData(
+                                true, ['Enio', 'Livio', 'Ivano', 'Marko']);
+
                         Navigator.popAndPushNamed(context, GameScreen.id);
                       },
                     ),
                     ModeButton(
                       tileLabel: '(NE) BUNDEVA',
                       tileColour: kRedColour,
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<NebundevaModel>(context, listen: false)
+                            .initializeGameData(
+                                false, ['Enio', 'Livio', 'Ivano', 'Marko']);
+
+                        Navigator.popAndPushNamed(context, GameScreen.id);
+                      },
                     ),
                   ],
                 ),
