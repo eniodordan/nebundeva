@@ -42,14 +42,18 @@ class NotificationOverlay extends ModalRoute<void> {
   }
 
   Widget _buildOverlayContent(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 75),
-          child: Text(
-            notificationMessage,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 96),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => Navigator.pop(context),
+      child: Container(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 75),
+            child: Text(
+              notificationMessage,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 96),
+            ),
           ),
         ),
       ),

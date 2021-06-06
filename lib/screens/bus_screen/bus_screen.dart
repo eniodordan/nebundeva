@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'widgets/vote_button.dart';
+import 'package:nebundeva/widgets/card_button.dart';
+
 class BusScreen extends StatefulWidget {
   static const String id = 'bus_screen';
 
@@ -57,10 +60,9 @@ class _BusScreenState extends State<BusScreen> {
                     ),
                   ],
                 ),
-                Expanded(
-                  child: CardButton(
-                    onPressed: () {},
-                  ),
+                CardButton(
+                  cardImage: Image.asset('images/queen_of_bells.jpg'),
+                  onPressed: () {},
                 ),
                 Column(
                   children: [
@@ -89,9 +91,15 @@ class _BusScreenState extends State<BusScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          LowHighButton(isLower: true),
+                          VoteButton(
+                            isLower: true,
+                            onPressed: () {},
+                          ),
                           SizedBox(width: 25),
-                          LowHighButton(isLower: false),
+                          VoteButton(
+                            isLower: false,
+                            onPressed: () {},
+                          ),
                         ],
                       ),
                     ),
@@ -101,55 +109,6 @@ class _BusScreenState extends State<BusScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CardButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  CardButton({required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25),
-          child: Container(
-            height: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset('images/queen_of_bells.jpg'),
-            ),
-          ),
-        ),
-      ),
-      onTap: onPressed,
-    );
-  }
-}
-
-class LowHighButton extends StatelessWidget {
-  final bool isLower;
-
-  LowHighButton({required this.isLower});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: 120,
-      child: ElevatedButton(
-        child: Icon(isLower ? Icons.arrow_downward : Icons.arrow_upward),
-        style: ElevatedButton.styleFrom(
-          primary: isLower ? kRedColour : kGreenColour,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-        onPressed: () {},
       ),
     );
   }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
-import 'package:nebundeva/models/nebundeva_model.dart';
-import 'package:nebundeva/widgets/notification_overlay.dart';
-
-import 'package:nebundeva/screens/scoreboard_screen.dart';
-
 import 'package:shake/shake.dart';
+import 'package:nebundeva/models/nebundeva_model.dart';
+
+import 'widgets/notification_overlay.dart';
+import 'package:nebundeva/widgets/card_button.dart';
+import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 
 class GameScreen extends StatefulWidget {
   static const String id = 'game_screen';
@@ -20,44 +20,41 @@ class _GameScreenState extends State<GameScreen> {
   ShakeDetector? shakeDetector;
 
   void _showOverlay(BuildContext context) {
-    Provider.of<NebundevaModel>(context, listen: false).isBundeva
-        ? Navigator.of(context).push(
-            NotificationOverlay(
-              overlayColour: kRedColour,
-              notificationMessage:
-                  '${Provider.of<NebundevaModel>(context, listen: false).currentPlayer.playerName} PIJE',
-            ),
-          )
-        : Navigator.of(context).push(
-            NotificationOverlay(
-              overlayColour: kGreenColour,
-              notificationMessage:
-                  '${Provider.of<NebundevaModel>(context, listen: false).currentPlayer.playerName} NE PIJE',
-            ),
-          );
+    final viewModel = Provider.of<NebundevaModel>(context, listen: false);
+
+    Navigator.of(context)
+        .push(
+          NotificationOverlay(
+            overlayColour: viewModel.isBundeva ? kRedColour : kGreenColour,
+            notificationMessage: viewModel.isBundeva
+                ? '${viewModel.currentPlayer.playerName} PIJE'
+                : '${viewModel.currentPlayer.playerName} NE PIJE',
+          ),
+        )
+        .then((_) => shakeDetector?.startListening());
   }
 
-  void _bellsCheck() {
-    if (Provider.of<NebundevaModel>(context, listen: false)
-        .currentPlayingCard
-        .isBell) {
-      Provider.of<NebundevaModel>(context, listen: false)
-          .currentPlayer
-          .bellsNumber++;
+  void _bellCheck() {
+    final viewModel = Provider.of<NebundevaModel>(context, listen: false);
 
+    if (viewModel.currentPlayingCard.isBell) {
+      viewModel.currentPlayer.bellsNumber++;
+
+      shakeDetector?.stopListening();
       _showOverlay(context);
     }
   }
 
-  void _playerMove() {
-    if (Provider.of<NebundevaModel>(context, listen: false).playingCardsCount >
-        0) {
-      Provider.of<NebundevaModel>(context, listen: false).moveToNextPlayer();
-      Provider.of<NebundevaModel>(context, listen: false).nextRandomCard();
-      _bellsCheck();
+  void _onPlayerMove() {
+    final viewModel = Provider.of<NebundevaModel>(context, listen: false);
+
+    if (viewModel.playingCardsCount > 0) {
+      viewModel.moveToNextPlayer();
+      viewModel.nextRandomCard();
+      _bellCheck();
     } else {
-      if (!Provider.of<NebundevaModel>(context, listen: false).isBundeva) {
-        Provider.of<NebundevaModel>(context, listen: false).sortPlayers();
+      if (!viewModel.isBundeva) {
+        viewModel.sortPlayers();
         Navigator.popAndPushNamed(context, ScoreboardScreen.id);
       } else {
         Navigator.pop(context);
@@ -68,10 +65,16 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _bellsCheck());
-    shakeDetector = ShakeDetector.waitForStart(onPhoneShake: () {
-      _playerMove();
-    });
+
+    shakeDetector = ShakeDetector.waitForStart(
+      shakeSlopTimeMS: 1000,
+      onPhoneShake: () {
+        _onPlayerMove();
+      },
+    );
+    shakeDetector?.startListening();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) => _bellCheck());
   }
 
   @override
@@ -91,8 +94,9 @@ class _GameScreenState extends State<GameScreen> {
                   Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Container(width: 32),
                           Text(
                             (viewModel.isBundeva &&
                                         viewModel.currentPlayingCard.isBell) ||
@@ -110,6 +114,53 @@ class _GameScreenState extends State<GameScreen> {
                                   : kGreenColour,
                               fontSize: 36,
                             ),
+                          ),
+                          GestureDetector(
+                            child: Icon(
+                              Icons.restart_alt,
+                              size: 32,
+                              color: kGreyColour,
+                            ),
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  content: Text(
+                                    'Jeste li sigurni da želite započeti igru iz početka?',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text(
+                                        'NE',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: kRedColour,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                        'DA',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: kGreenColour,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -137,7 +188,7 @@ class _GameScreenState extends State<GameScreen> {
                   ),
                   CardButton(
                     cardImage: viewModel.currentPlayingCard.cardImage,
-                    onPressed: _playerMove,
+                    onPressed: _onPlayerMove,
                   ),
                   Column(
                     children: [
@@ -195,31 +246,5 @@ class _GameScreenState extends State<GameScreen> {
   void dispose() {
     shakeDetector?.stopListening();
     super.dispose();
-  }
-}
-
-class CardButton extends StatelessWidget {
-  final Image cardImage;
-  final VoidCallback onPressed;
-
-  CardButton({required this.cardImage, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25),
-          child: Container(
-            height: double.infinity,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: cardImage,
-            ),
-          ),
-        ),
-        onTap: onPressed,
-      ),
-    );
   }
 }

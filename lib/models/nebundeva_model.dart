@@ -11,15 +11,23 @@ class NebundevaModel extends ChangeNotifier {
 
   int _currentPlayerIndex = 0;
 
-  List<PlayingCard> _availablePlayingCards = playingCards;
+  List<PlayingCard> _availablePlayingCards = [];
   PlayingCard _currentPlayingCard = playingCards[0];
 
-  void initializeGameData(bool isBundeva, List<String> players) {
+  void initializeModel(bool isBundeva, List<String> players) {
     _isBundeva = isBundeva;
 
+    _players.clear();
     players.forEach((player) {
       _players.add(Player(playerName: player));
     });
+
+    _currentPlayerIndex = 0;
+
+    _availablePlayingCards.clear();
+    _availablePlayingCards = List.from(playingCards);
+
+    _currentPlayingCard = playingCards[0];
 
     nextRandomCard();
 
