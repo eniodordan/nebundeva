@@ -23,7 +23,10 @@ class Nebundeva extends StatelessWidget {
         title: '(Ne)bundeva',
         theme: ThemeData(
           brightness: Brightness.dark,
+          primaryColor: Colors.white,
+          accentColor: Colors.white,
           backgroundColor: kBackgroundColour,
+          dialogBackgroundColor: kBackgroundColour,
           scaffoldBackgroundColor: kBackgroundColour,
           fontFamily: 'BebasNeue',
         ),

@@ -48,7 +48,7 @@ class NotificationOverlay extends ModalRoute<void> {
       child: Container(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 75),
+            padding: EdgeInsets.symmetric(horizontal: 50),
             child: Text(
               notificationMessage,
               textAlign: TextAlign.center,

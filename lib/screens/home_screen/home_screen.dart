@@ -18,6 +18,115 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: MediaQuery.of(context).size.width,
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '(NE) ',
+                          style: TextStyle(
+                            color: kRedColour,
+                            fontSize: 44,
+                          ),
+                        ),
+                        Text(
+                          'BUNDEVA',
+                          style: TextStyle(
+                            color: kGreenColour,
+                            fontSize: 44,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            'Tko igra?',
+                            style: TextStyle(fontSize: 36),
+                          ),
+                        ),
+                        ..._getTextFields(),
+                        Visibility(
+                          visible: isButtonVisible,
+                          child: AddPlayerButton(
+                            onPressed: () {
+                              if (playersList.length < 4) {
+                                setState(() {
+                                  playersList.add('');
+                                  if (playersList.length == 4) {
+                                    isButtonVisible = false;
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    ActionButton(
+                      buttonText: 'Započni',
+                      textColour: kBackgroundColour,
+                      buttonColour: Colors.white,
+                      onPressed: () {
+                        List<String> players = [];
+
+                        playersList.forEach((playerName) {
+                          if (playerName.trim().isNotEmpty) {
+                            players.add(playerName.trim());
+                          }
+                        });
+
+                        if (players.length >= 2) {
+                          Navigator.pushNamed(context, ModeScreen.id,
+                              arguments: players);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Potrebna su najmanje 2 igrača',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'BebasNeue',
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              backgroundColor: kRedColour,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /* @override
+  Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom / 2;
 
     return WillPopScope(
@@ -99,15 +208,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Container(
-                              height: 50,
-                              child: Text(
-                                'Potrebna su najmanje 2 igrača',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'BebasNeue',
-                                  color: Colors.white,
-                                ),
+                            content: Text(
+                              'Potrebna su najmanje 2 igrača',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'BebasNeue',
+                                fontSize: 16,
+                                color: Colors.white,
                               ),
                             ),
                             backgroundColor: kRedColour,
@@ -123,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
+  } */
 
   List<Widget> _getTextFields() {
     List<Widget> playersTextFields = [];
