@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
 import 'package:shake/shake.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 
 import 'widgets/notification_overlay.dart';
@@ -17,7 +18,14 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  AudioCache audioCache = AudioCache();
+  AudioPlayer? audioPlayer;
   ShakeDetector? shakeDetector;
+
+  void _playSound(String localPath) async {
+    await audioPlayer?.stop();
+    audioPlayer = await audioCache.play(localPath);
+  }
 
   void _showOverlay(BuildContext context) {
     final viewModel = Provider.of<NebundevaModel>(context, listen: false);
@@ -42,6 +50,7 @@ class _GameScreenState extends State<GameScreen> {
 
       shakeDetector?.stopListening();
       _showOverlay(context);
+      _playSound('bottle_opener.mp3');
     }
   }
 
