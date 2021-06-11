@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:nebundeva/models/bus_model.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 
 import 'widgets/scoreboard_tile.dart';
@@ -85,8 +86,10 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                   textColour: Colors.white,
                   buttonColour: kRedColour,
                   onPressed: () {
-                    Navigator.pop(context);
-                    // Navigator.popAndPushNamed(context, BusScreen.id);
+                    Provider.of<BusModel>(context, listen: false)
+                        .initializeModel(viewModel.players[0]);
+
+                    Navigator.popAndPushNamed(context, BusScreen.id);
                   },
                 ),
               ],

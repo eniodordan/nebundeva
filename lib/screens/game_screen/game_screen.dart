@@ -7,6 +7,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 
 import 'widgets/notification_overlay.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:nebundeva/widgets/card_button.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 
@@ -18,6 +19,8 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
+  bool isLast = false;
   AudioCache audioCache = AudioCache();
   AudioPlayer? audioPlayer;
   ShakeDetector? shakeDetector;
@@ -50,16 +53,22 @@ class _GameScreenState extends State<GameScreen> {
 
       shakeDetector?.stopListening();
       _showOverlay(context);
-      _playSound('bottle_opener.mp3');
+      _playSound('can_opener.mp3');
     }
   }
 
   void _onPlayerMove() {
     final viewModel = Provider.of<NebundevaModel>(context, listen: false);
 
-    if (viewModel.playingCardsCount > 0) {
+    if (viewModel.playingCardsCount >= 0 && !isLast) {
       viewModel.moveToNextPlayer();
-      viewModel.nextRandomCard();
+      viewModel.currentPlayingCard = viewModel.nextPlayingCard;
+      if (viewModel.playingCardsCount != 0) {
+        viewModel.nextPlayingCard = viewModel.getNextRandomCard();
+      } else {
+        isLast = true;
+      }
+
       _bellCheck();
     } else {
       if (!viewModel.isBundeva) {
@@ -196,7 +205,10 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ),
                   CardButton(
-                    cardImage: viewModel.currentPlayingCard.cardImage,
+                    cardKey: cardKey,
+                    frontImage: viewModel.currentPlayingCard.cardImage,
+                    backImage: viewModel.nextPlayingCard.cardImage,
+                    isBusCard: false,
                     onPressed: _onPlayerMove,
                   ),
                   Column(
@@ -232,7 +244,7 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                           ),
                           Text(
-                            '${viewModel.playingCardsCount}',
+                            '${isLast ? 0 : viewModel.playingCardsCount + 1}',
                             style: TextStyle(
                               color: kLightGreyColour,
                               fontSize: 24,

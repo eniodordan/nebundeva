@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 
-class CardButton extends StatelessWidget {
-  final Image cardImage;
+class CardButton extends StatefulWidget {
+  final GlobalKey<FlipCardState> cardKey;
+  final Image frontImage;
+  final Image backImage;
+  final bool isBusCard;
   final VoidCallback onPressed;
 
-  CardButton({required this.cardImage, required this.onPressed});
+  CardButton({
+    required this.cardKey,
+    required this.frontImage,
+    required this.backImage,
+    required this.isBusCard,
+    required this.onPressed,
+  });
+
+  @override
+  _CardButtonState createState() => _CardButtonState();
+}
+
+class _CardButtonState extends State<CardButton> {
+  bool _flipOnTouch = true;
+  bool _isFront = true;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FlipCard(
+        key: widget.cardKey,
+        flipOnTouch: widget.isBusCard ? false : _flipOnTouch,
         onFlip: () {
-          Future.delayed(const Duration(milliseconds: 250), () {
-            onPressed();
+          setState(() => _flipOnTouch = false);
+        },
+        onFlipDone: (isFront) {
+          widget.onPressed();
+
+          setState(() {
+            _isFront = isFront;
+            _flipOnTouch = true;
           });
         },
         front: Padding(
@@ -22,7 +47,7 @@ class CardButton extends StatelessWidget {
             height: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: cardImage,
+              child: _isFront ? widget.frontImage : widget.backImage,
             ),
           ),
         ),
@@ -32,7 +57,7 @@ class CardButton extends StatelessWidget {
             height: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: cardImage,
+              child: !_isFront ? widget.frontImage : widget.backImage,
             ),
           ),
         ),

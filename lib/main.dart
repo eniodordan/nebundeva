@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
 import 'package:nebundeva/models/nebundeva_model.dart';
+import 'package:nebundeva/models/bus_model.dart';
 
 import 'package:nebundeva/screens/home_screen/home_screen.dart';
 import 'package:nebundeva/screens/mode_screen/mode_screen.dart';
@@ -17,8 +19,13 @@ void main() {
 class Nebundeva extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => NebundevaModel(),
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => NebundevaModel()),
+        ChangeNotifierProvider(create: (context) => BusModel()),
+      ],
       child: MaterialApp(
         title: '(Ne)bundeva',
         theme: ThemeData(

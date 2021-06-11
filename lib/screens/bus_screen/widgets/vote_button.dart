@@ -9,9 +9,11 @@ class VoteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: 120,
+    return ConstrainedBox(
+      constraints: BoxConstraints.tightFor(
+        width: 120,
+        height: 60,
+      ),
       child: ElevatedButton(
         child: Icon(isLower ? Icons.arrow_downward : Icons.arrow_upward),
         style: ElevatedButton.styleFrom(

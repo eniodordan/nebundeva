@@ -13,6 +13,7 @@ class NebundevaModel extends ChangeNotifier {
 
   List<PlayingCard> _availablePlayingCards = [];
   PlayingCard _currentPlayingCard = playingCards[0];
+  PlayingCard _nextPlayingCard = playingCards[0];
 
   void initializeModel(bool isBundeva, List<String> players) {
     _isBundeva = isBundeva;
@@ -28,8 +29,10 @@ class NebundevaModel extends ChangeNotifier {
     _availablePlayingCards = List.from(playingCards);
 
     _currentPlayingCard = playingCards[0];
+    _currentPlayingCard = getNextRandomCard();
 
-    nextRandomCard();
+    _nextPlayingCard = playingCards[0];
+    _nextPlayingCard = getNextRandomCard();
 
     notifyListeners();
   }
@@ -58,6 +61,18 @@ class NebundevaModel extends ChangeNotifier {
     return _currentPlayingCard;
   }
 
+  set currentPlayingCard(PlayingCard playingCard) {
+    this._currentPlayingCard = playingCard;
+  }
+
+  PlayingCard get nextPlayingCard {
+    return _nextPlayingCard;
+  }
+
+  set nextPlayingCard(PlayingCard playingCard) {
+    this._nextPlayingCard = playingCard;
+  }
+
   int get playingCardsCount {
     return _availablePlayingCards.length;
   }
@@ -72,14 +87,13 @@ class NebundevaModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextRandomCard() {
+  PlayingCard getNextRandomCard() {
     PlayingCard randomCard =
         _availablePlayingCards[Random().nextInt(_availablePlayingCards.length)];
 
     _availablePlayingCards.remove(randomCard);
-    _currentPlayingCard = randomCard;
 
-    notifyListeners();
+    return randomCard;
   }
 
   void sortPlayers() {
