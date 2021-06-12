@@ -7,12 +7,10 @@ import 'package:nebundeva/models/playing_card.dart';
 class BusModel extends ChangeNotifier {
   String _driverName = '';
 
-  int _driverSeat = 0;
+  int _driverStage = 1;
 
-  List<PlayingCard> _busPlayingCards = [];
   List<PlayingCard> _availablePlayingCards = [];
-
-  PlayingCard _nextRandomPlayingCard = playingCards[0];
+  PlayingCard _busPlayingCard = playingCards[0];
 
   void initializeModel(Player driver) {
     _driverName = driver.playerName;
@@ -20,13 +18,11 @@ class BusModel extends ChangeNotifier {
     _availablePlayingCards.clear();
     _availablePlayingCards = List.from(playingCards);
 
-    _nextRandomPlayingCard = playingCards[0];
-    nextRandomCard();
+    _driverStage = 1;
 
-    for (int i = 0; i < 5; i++) {
-      _busPlayingCards.add(_nextRandomPlayingCard);
-      nextRandomCard();
-    }
+    _busPlayingCard = playingCards[0];
+
+    nextRandomCard();
 
     notifyListeners();
   }
@@ -35,16 +31,23 @@ class BusModel extends ChangeNotifier {
     return _driverName;
   }
 
-  int get driverSeat {
-    return _driverSeat;
+  int get driverStage {
+    return _driverStage;
   }
 
-  List<PlayingCard> get busPlayingCards {
-    return _busPlayingCards;
+  PlayingCard get busPlayingCard {
+    return _busPlayingCard;
   }
 
-  PlayingCard get nextRandomPlayingCard {
-    return _nextRandomPlayingCard;
+  int get playingCardsCount {
+    return _availablePlayingCards.length;
+  }
+
+  void refillPlayingCards() {
+    _availablePlayingCards.clear();
+    _availablePlayingCards = List.from(playingCards);
+
+    notifyListeners();
   }
 
   void nextRandomCard() {
@@ -52,24 +55,29 @@ class BusModel extends ChangeNotifier {
         _availablePlayingCards[Random().nextInt(_availablePlayingCards.length)];
 
     _availablePlayingCards.remove(randomCard);
-    _nextRandomPlayingCard = randomCard;
+    _busPlayingCard = randomCard;
 
     notifyListeners();
   }
 
   bool onDriverVote(bool isLower) {
-    PlayingCard currentCard = busPlayingCards[driverSeat];
+    PlayingCard currentCard = _busPlayingCard;
+    nextRandomCard();
 
     if (isLower) {
-      if (_nextRandomPlayingCard.cardValue < currentCard.cardValue) {
+      if (_busPlayingCard.cardValue < currentCard.cardValue) {
+        _driverStage++;
         return true;
       } else {
+        _driverStage = 1;
         return false;
       }
     } else {
-      if (_nextRandomPlayingCard.cardValue > currentCard.cardValue) {
+      if (_busPlayingCard.cardValue > currentCard.cardValue) {
+        _driverStage++;
         return true;
       } else {
+        _driverStage = 1;
         return false;
       }
     }

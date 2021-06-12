@@ -38,39 +38,64 @@ class _BusScreenState extends State<BusScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      'BUS',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 42,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           'Razina: ',
                           style: TextStyle(
                             color: kGreyColour,
-                            fontSize: 24,
+                            fontSize: 36,
                           ),
                         ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${viewModel.driverStage}',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 38),
+                            ),
+                            Text(
+                              '/5',
+                              style: TextStyle(
+                                color: kLightGreyColour,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
                         Text(
-                          '${viewModel.driverSeat + 1}',
+                          'Karte: ',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
+                            color: kGreyColour,
+                            fontSize: 36,
                           ),
                         ),
-                        Text(
-                          ' od 5',
-                          style: TextStyle(
-                            color: kLightGreyColour,
-                            fontSize: 24,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${viewModel.playingCardsCount}',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 38),
+                            ),
+                            Text(
+                              '/32',
+                              style: TextStyle(
+                                color: kLightGreyColour,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -78,10 +103,7 @@ class _BusScreenState extends State<BusScreen> {
                 ),
                 CardButton(
                   cardKey: cardKey,
-                  frontImage:
-                      viewModel.busPlayingCards[viewModel.driverSeat].cardImage,
-                  backImage: viewModel.nextRandomPlayingCard.cardImage,
-                  isBusCard: true,
+                  cardImage: viewModel.busPlayingCard.cardImage,
                   onPressed: () {},
                 ),
                 Column(
@@ -116,8 +138,14 @@ class _BusScreenState extends State<BusScreen> {
                             onPressed: () {
                               if (viewModel.onDriverVote(true)) {
                                 _playSound('correct_answer.mp3');
+                                if (viewModel.driverStage > 5) {
+                                  Navigator.pop(context);
+                                }
                               } else {
                                 _playSound('wrong_answer.mp3');
+                              }
+                              if (viewModel.playingCardsCount == 0) {
+                                viewModel.refillPlayingCards();
                               }
                               cardKey.currentState!.toggleCard();
                             },
@@ -128,8 +156,14 @@ class _BusScreenState extends State<BusScreen> {
                             onPressed: () {
                               if (viewModel.onDriverVote(false)) {
                                 _playSound('correct_answer.mp3');
+                                if (viewModel.driverStage > 5) {
+                                  Navigator.pop(context);
+                                }
                               } else {
                                 _playSound('wrong_answer.mp3');
+                              }
+                              if (viewModel.playingCardsCount == 0) {
+                                viewModel.refillPlayingCards();
                               }
                               cardKey.currentState!.toggleCard();
                             },

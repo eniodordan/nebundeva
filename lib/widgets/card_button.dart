@@ -2,19 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 
 class CardButton extends StatefulWidget {
-  final GlobalKey<FlipCardState> cardKey;
-  final Image frontImage;
-  final Image backImage;
-  final bool isBusCard;
+  final GlobalKey<FlipCardState>? cardKey;
+  final Image cardImage;
   final VoidCallback onPressed;
 
-  CardButton({
-    required this.cardKey,
-    required this.frontImage,
-    required this.backImage,
-    required this.isBusCard,
-    required this.onPressed,
-  });
+  CardButton({this.cardKey, required this.cardImage, required this.onPressed});
 
   @override
   _CardButtonState createState() => _CardButtonState();
@@ -23,19 +15,26 @@ class CardButton extends StatefulWidget {
 class _CardButtonState extends State<CardButton> {
   bool _flipOnTouch = true;
   bool _isFront = true;
+  Image? currentImage;
+
+  @override
+  void initState() {
+    super.initState();
+    currentImage = widget.cardImage;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FlipCard(
         key: widget.cardKey,
-        flipOnTouch: widget.isBusCard ? false : _flipOnTouch,
+        flipOnTouch: widget.cardKey != null ? false : _flipOnTouch,
         onFlip: () {
           setState(() => _flipOnTouch = false);
+          widget.onPressed();
         },
         onFlipDone: (isFront) {
-          widget.onPressed();
-
+          currentImage = widget.cardImage;
           setState(() {
             _isFront = isFront;
             _flipOnTouch = true;
@@ -47,7 +46,7 @@ class _CardButtonState extends State<CardButton> {
             height: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: _isFront ? widget.frontImage : widget.backImage,
+              child: _isFront ? currentImage : widget.cardImage,
             ),
           ),
         ),
@@ -57,7 +56,7 @@ class _CardButtonState extends State<CardButton> {
             height: double.infinity,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: !_isFront ? widget.frontImage : widget.backImage,
+              child: !_isFront ? currentImage : widget.cardImage,
             ),
           ),
         ),

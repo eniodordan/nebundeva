@@ -7,7 +7,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 
 import 'widgets/notification_overlay.dart';
-import 'package:flip_card/flip_card.dart';
 import 'package:nebundeva/widgets/card_button.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 
@@ -19,8 +18,6 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
-  bool isLast = false;
   AudioCache audioCache = AudioCache();
   AudioPlayer? audioPlayer;
   ShakeDetector? shakeDetector;
@@ -60,15 +57,9 @@ class _GameScreenState extends State<GameScreen> {
   void _onPlayerMove() {
     final viewModel = Provider.of<NebundevaModel>(context, listen: false);
 
-    if (viewModel.playingCardsCount >= 0 && !isLast) {
+    if (viewModel.playingCardsCount > 0) {
       viewModel.moveToNextPlayer();
-      viewModel.currentPlayingCard = viewModel.nextPlayingCard;
-      if (viewModel.playingCardsCount != 0) {
-        viewModel.nextPlayingCard = viewModel.getNextRandomCard();
-      } else {
-        isLast = true;
-      }
-
+      viewModel.nextRandomCard();
       _bellCheck();
     } else {
       if (!viewModel.isBundeva) {
@@ -205,10 +196,7 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ),
                   CardButton(
-                    cardKey: cardKey,
-                    frontImage: viewModel.currentPlayingCard.cardImage,
-                    backImage: viewModel.nextPlayingCard.cardImage,
-                    isBusCard: false,
+                    cardImage: viewModel.currentPlayingCard.cardImage,
                     onPressed: _onPlayerMove,
                   ),
                   Column(
@@ -244,7 +232,7 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                           ),
                           Text(
-                            '${isLast ? 0 : viewModel.playingCardsCount + 1}',
+                            '${viewModel.playingCardsCount}',
                             style: TextStyle(
                               color: kLightGreyColour,
                               fontSize: 24,
