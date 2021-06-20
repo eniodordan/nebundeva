@@ -12,9 +12,7 @@ import 'package:nebundeva/screens/game_screen/game_screen.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 import 'package:nebundeva/screens/bus_screen/bus_screen.dart';
 
-void main() {
-  runApp(Nebundeva());
-}
+void main() => runApp(Nebundeva());
 
 class Nebundeva extends StatelessWidget {
   @override

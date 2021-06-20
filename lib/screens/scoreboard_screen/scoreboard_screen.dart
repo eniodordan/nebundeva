@@ -21,78 +21,81 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<NebundevaModel>(context);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 50),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '(NE) BUNDEVA',
-                  style: TextStyle(
-                    color: kRedColour,
-                    fontSize: 42,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 50),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '(NE) BUNDEVA',
+                    style: TextStyle(
+                      color: kRedColour,
+                      fontSize: 42,
+                    ),
                   ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      'Poredak igrača',
-                      style: TextStyle(
-                        fontSize: 28,
+                  Column(
+                    children: [
+                      Text(
+                        'Poredak igrača',
+                        style: TextStyle(
+                          fontSize: 28,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 25),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Ime igrača',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: kLightGreyColour,
+                      SizedBox(height: 25),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                'Ime igrača',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: kLightGreyColour,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Broj bundevi',
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: kLightGreyColour,
+                              Text(
+                                'Broj bundevi',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: kLightGreyColour,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: viewModel.players.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ScoreboardTile(
-                              isDriver: index == 0 ? true : false,
-                              player: viewModel.players[index],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                ActionButton(
-                  buttonText: 'Bus',
-                  textColour: Colors.white,
-                  buttonColour: kRedColour,
-                  onPressed: () {
-                    Provider.of<BusModel>(context, listen: false)
-                        .initializeModel(viewModel.players[0]);
+                            ],
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: viewModel.players.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ScoreboardTile(
+                                isDriver: index == 0 ? true : false,
+                                player: viewModel.players[index],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  ActionButton(
+                    buttonText: 'Bus',
+                    textColour: Colors.white,
+                    buttonColour: kRedColour,
+                    onPressed: () {
+                      Provider.of<BusModel>(context, listen: false)
+                          .initializeModel(viewModel.players[0]);
 
-                    Navigator.popAndPushNamed(context, BusScreen.id);
-                  },
-                ),
-              ],
+                      Navigator.popAndPushNamed(context, BusScreen.id);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

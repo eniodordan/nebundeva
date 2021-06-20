@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nebundeva/constants.dart';
 
 class NotificationOverlay extends ModalRoute<void> {
-  final Color overlayColour;
-  final String notificationMessage;
+  final bool isPunishment;
+  final String playerName;
 
-  NotificationOverlay({
-    required this.overlayColour,
-    required this.notificationMessage,
-  });
+  NotificationOverlay({required this.isPunishment, required this.playerName});
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 500);
@@ -19,7 +17,8 @@ class NotificationOverlay extends ModalRoute<void> {
   bool get barrierDismissible => false;
 
   @override
-  Color get barrierColor => overlayColour.withOpacity(0.9);
+  Color get barrierColor =>
+      (isPunishment ? kRedColour : kGreenColour).withOpacity(0.9);
 
   @override
   String? get barrierLabel => null;
@@ -49,10 +48,20 @@ class NotificationOverlay extends ModalRoute<void> {
         child: Center(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 50),
-            child: Text(
-              notificationMessage,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 96),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  playerName,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 84),
+                ),
+                Text(
+                  isPunishment ? 'PIJE' : 'NE PIJE',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 84),
+                ),
+              ],
             ),
           ),
         ),

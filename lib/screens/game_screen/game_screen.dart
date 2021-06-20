@@ -6,7 +6,7 @@ import 'package:shake/shake.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 
-import 'widgets/notification_overlay.dart';
+import '../../widgets/notification_overlay.dart';
 import 'package:nebundeva/widgets/card_button.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 
@@ -33,10 +33,8 @@ class _GameScreenState extends State<GameScreen> {
     Navigator.of(context)
         .push(
           NotificationOverlay(
-            overlayColour: viewModel.isBundeva ? kRedColour : kGreenColour,
-            notificationMessage: viewModel.isBundeva
-                ? '${viewModel.currentPlayer.playerName} PIJE'
-                : '${viewModel.currentPlayer.playerName} NE PIJE',
+            isPunishment: viewModel.isBundeva,
+            playerName: viewModel.currentPlayer.playerName,
           ),
         )
         .then((_) => shakeDetector?.startListening());
@@ -50,7 +48,7 @@ class _GameScreenState extends State<GameScreen> {
 
       shakeDetector?.stopListening();
       _showOverlay(context);
-      _playSound('can_opener.mp3');
+      if (viewModel.isBundeva) _playSound('can_opener.mp3');
     }
   }
 

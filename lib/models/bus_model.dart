@@ -60,12 +60,20 @@ class BusModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool onDriverVote(bool isLower) {
+  bool onDriverVote(int voteOption) {
     PlayingCard currentCard = _busPlayingCard;
     nextRandomCard();
 
-    if (isLower) {
+    if (voteOption == 0) {
       if (_busPlayingCard.cardValue < currentCard.cardValue) {
+        _driverStage++;
+        return true;
+      } else {
+        _driverStage = 1;
+        return false;
+      }
+    } else if (voteOption == 1) {
+      if (_busPlayingCard.cardValue == currentCard.cardValue) {
         _driverStage++;
         return true;
       } else {
