@@ -5,6 +5,7 @@ import 'package:nebundeva/constants.dart';
 import 'package:shake/shake.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/notification_overlay.dart';
 import 'package:nebundeva/widgets/card_button.dart';
@@ -44,7 +45,7 @@ class _GameScreenState extends State<GameScreen> {
     final viewModel = Provider.of<NebundevaModel>(context, listen: false);
 
     if (viewModel.currentPlayingCard.isBell) {
-      viewModel.currentPlayer.bellsNumber++;
+      viewModel.incrementBellsNumber();
 
       shakeDetector?.stopListening();
       _showOverlay(context);
@@ -52,12 +53,12 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  void _onPlayerMove() {
+  void _onPlayerMove() async {
     final viewModel = Provider.of<NebundevaModel>(context, listen: false);
 
     if (viewModel.playingCardsCount > 0) {
-      viewModel.moveToNextPlayer();
-      viewModel.nextRandomCard();
+      await viewModel.moveToNextPlayer();
+      await viewModel.nextRandomCard();
       _bellCheck();
     } else {
       if (!viewModel.isBundeva) {
@@ -147,7 +148,11 @@ class _GameScreenState extends State<GameScreen> {
                                           color: kRedColour,
                                         ),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        final prefs = await SharedPreferences
+                                            .getInstance();
+
+                                        prefs.setInt('gameProgress', 0);
                                         Navigator.pop(context);
                                       },
                                     ),
@@ -194,7 +199,8 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ),
                   CardButton(
-                    cardImage: viewModel.currentPlayingCard.cardImage,
+                    cardImage:
+                        Image.asset(viewModel.currentPlayingCard.cardImagePath),
                     onPressed: _onPlayerMove,
                   ),
                   Column(

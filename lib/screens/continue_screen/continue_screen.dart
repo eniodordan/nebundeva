@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:nebundeva/models/bus_model.dart';
+import 'package:nebundeva/models/nebundeva_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:nebundeva/widgets/action_button.dart';
+import 'package:nebundeva/screens/bus_screen/bus_screen.dart';
+import 'package:nebundeva/screens/game_screen/game_screen.dart';
 import 'package:nebundeva/screens/home_screen/home_screen.dart';
 
 class ContinueScreen extends StatelessWidget {
@@ -28,7 +35,23 @@ class ContinueScreen extends StatelessWidget {
                     buttonText: 'Nastavi igru',
                     textColour: kBackgroundColour,
                     buttonColour: Color(0xFF9A9AA1),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      int gameProgress = prefs.getInt('gameProgress')!;
+
+                      if (gameProgress == 1) {
+                        await Provider.of<NebundevaModel>(context,
+                                listen: false)
+                            .loadPrefs();
+                        Navigator.popAndPushNamed(context, HomeScreen.id);
+                        Navigator.pushNamed(context, GameScreen.id);
+                      } else {
+                        await Provider.of<BusModel>(context, listen: false)
+                            .loadPrefs();
+                        Navigator.popAndPushNamed(context, HomeScreen.id);
+                        Navigator.pushNamed(context, BusScreen.id);
+                      }
+                    },
                   ),
                   ActionButton(
                     buttonText: 'Započni novu igru',

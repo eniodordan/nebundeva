@@ -5,6 +5,7 @@ import 'package:nebundeva/constants.dart';
 
 import 'package:nebundeva/models/nebundeva_model.dart';
 import 'package:nebundeva/models/bus_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:nebundeva/screens/continue_screen/continue_screen.dart';
 import 'package:nebundeva/screens/home_screen/home_screen.dart';
@@ -16,6 +17,13 @@ import 'package:nebundeva/screens/bus_screen/bus_screen.dart';
 void main() => runApp(Nebundeva());
 
 class Nebundeva extends StatelessWidget {
+  Future<int> getGameProgress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int gameProgress = prefs.getInt('gameProgress') ?? 0;
+
+    return gameProgress;
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -36,7 +44,6 @@ class Nebundeva extends StatelessWidget {
           scaffoldBackgroundColor: kBackgroundColour,
           fontFamily: 'BebasNeue',
         ),
-        initialRoute: ContinueScreen.id,
         routes: {
           ContinueScreen.id: (context) => ContinueScreen(),
           HomeScreen.id: (context) => HomeScreen(),
@@ -45,6 +52,20 @@ class Nebundeva extends StatelessWidget {
           ScoreboardScreen.id: (context) => ScoreboardScreen(),
           BusScreen.id: (context) => BusScreen(),
         },
+        home: FutureBuilder(
+          future: getGameProgress(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data != 0) {
+                return ContinueScreen();
+              } else {
+                return HomeScreen();
+              }
+            } else {
+              return Scaffold();
+            }
+          },
+        ),
       ),
     );
   }

@@ -1,8 +1,11 @@
 import 'dart:math';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:nebundeva/models/player.dart';
 import 'package:nebundeva/models/playing_card.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NebundevaModel extends ChangeNotifier {
   bool _isBundeva = true;
@@ -14,20 +17,60 @@ class NebundevaModel extends ChangeNotifier {
   List<PlayingCard> _availablePlayingCards = [];
   PlayingCard _currentPlayingCard = playingCards[0];
 
-  void initializeModel(bool isBundeva, List<String> players) {
-    _isBundeva = isBundeva;
+  Future<void> loadPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
 
-    _players.clear();
+    _isBundeva = prefs.getBool('isBundeva')!;
+
+    List<String> players = prefs.getStringList('players')!;
     players.forEach((player) {
-      _players.add(Player(playerName: player));
+      _players.add((Player.fromJson(jsonDecode(player))));
     });
 
+    _currentPlayerIndex = prefs.getInt('currentPlayerIndex')!;
+
+    List<String> availablePlayingCards =
+        prefs.getStringList('availablePlayingCards')!;
+    availablePlayingCards.forEach((playingCard) {
+      _availablePlayingCards
+          .add((PlayingCard.fromJson(jsonDecode(playingCard))));
+    });
+
+    _currentPlayingCard = PlayingCard.fromJson(
+        jsonDecode(prefs.getString('currentPlayingCard')!));
+  }
+
+  Future<void> initializeModel(bool isBundeva, List<String> playerNames) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setInt('gameProgress', 1);
+
+    _isBundeva = isBundeva;
+    await prefs.setBool('isBundeva', _isBundeva);
+
+    _players.clear();
+    playerNames.forEach((playerName) {
+      _players.add(Player(playerName: playerName));
+    });
+
+    List<String> players = [];
+    _players.forEach((player) => players.add(jsonEncode(player.toJson())));
+    await prefs.setStringList('players', players);
+
     _currentPlayerIndex = 0;
+    await prefs.setInt('currentPlayerIndex', _currentPlayerIndex);
 
     _availablePlayingCards.clear();
     _availablePlayingCards = List.from(playingCards);
 
+    List<String> availablePlayingCards = [];
+    _availablePlayingCards.forEach((playingCard) =>
+        availablePlayingCards.add(jsonEncode(playingCard.toJson())));
+    await prefs.setStringList('availablePlayingCards', availablePlayingCards);
+
     _currentPlayingCard = playingCards[0];
+    await prefs.setString(
+        'currentPlayingCard', jsonEncode(_currentPlayingCard.toJson()));
 
     nextRandomCard();
 
@@ -62,22 +105,47 @@ class NebundevaModel extends ChangeNotifier {
     return _availablePlayingCards.length;
   }
 
-  void moveToNextPlayer() {
+  Future<void> moveToNextPlayer() async {
+    final prefs = await SharedPreferences.getInstance();
+
     if (_currentPlayerIndex + 1 > _players.length - 1) {
       _currentPlayerIndex = 0;
     } else {
       _currentPlayerIndex++;
     }
 
+    await prefs.setInt('currentPlayerIndex', _currentPlayerIndex);
+
     notifyListeners();
   }
 
-  void nextRandomCard() {
+  Future<void> nextRandomCard() async {
+    final prefs = await SharedPreferences.getInstance();
+
     PlayingCard randomCard =
         _availablePlayingCards[Random().nextInt(_availablePlayingCards.length)];
 
     _availablePlayingCards.remove(randomCard);
     _currentPlayingCard = randomCard;
+
+    List<String> availablePlayingCards = [];
+    _availablePlayingCards.forEach((playingCard) =>
+        availablePlayingCards.add(jsonEncode(playingCard.toJson())));
+    await prefs.setStringList('availablePlayingCards', availablePlayingCards);
+
+    await prefs.setString(
+        'currentPlayingCard', jsonEncode(_currentPlayingCard.toJson()));
+
+    notifyListeners();
+  }
+
+  Future<void> incrementBellsNumber() async {
+    final prefs = await SharedPreferences.getInstance();
+    _players[_currentPlayerIndex].bellsNumber++;
+
+    List<String> players = [];
+    _players.forEach((player) => players.add(jsonEncode(player.toJson())));
+    await prefs.setStringList('players', players);
 
     notifyListeners();
   }

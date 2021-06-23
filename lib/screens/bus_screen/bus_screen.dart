@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nebundeva/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:nebundeva/constants.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/bus_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/vote_button.dart';
 import 'package:flip_card/flip_card.dart';
@@ -35,19 +36,24 @@ class _BusScreenState extends State<BusScreen> {
     audioPlayer = await audioCache.play(localPath);
   }
 
-  void _processVote(int voteOption) {
+  void _processVote(int voteOption) async {
     final viewModel = Provider.of<BusModel>(context, listen: false);
-    bool isChoiceCorrect = viewModel.onDriverVote(voteOption);
+    bool isChoiceCorrect = await viewModel.onDriverVote(voteOption);
 
     if (isChoiceCorrect) {
-      if (viewModel.driverStage > 5) Navigator.pop(context);
+      if (viewModel.driverStage > 5) {
+        final prefs = await SharedPreferences.getInstance();
+
+        prefs.setInt('gameProgress', 0);
+        Navigator.pop(context);
+      }
       _playSound('correct_answer.mp3');
     } else {
       _showOverlay(context);
       _playSound('wrong_answer.mp3');
     }
 
-    if (viewModel.playingCardsCount == 0) viewModel.refillPlayingCards();
+    if (viewModel.playingCardsCount == 0) await viewModel.refillPlayingCards();
 
     cardKey.currentState!.toggleCard();
   }
@@ -131,7 +137,8 @@ class _BusScreenState extends State<BusScreen> {
                   ),
                   CardButton(
                     cardKey: cardKey,
-                    cardImage: viewModel.busPlayingCard.cardImage,
+                    cardImage:
+                        Image.asset(viewModel.busPlayingCard.cardImagePath),
                     onPressed: () {},
                   ),
                   Column(

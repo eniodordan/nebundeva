@@ -52,8 +52,9 @@ class ModeScreen extends StatelessWidget {
                     ModeButton(
                       tileLabel: 'BUNDEVA',
                       tileColour: kGreenColour,
-                      onPressed: () {
-                        Provider.of<NebundevaModel>(context, listen: false)
+                      onPressed: () async {
+                        await Provider.of<NebundevaModel>(context,
+                                listen: false)
                             .initializeModel(true, players);
 
                         Navigator.popAndPushNamed(context, GameScreen.id);
@@ -62,8 +63,9 @@ class ModeScreen extends StatelessWidget {
                     ModeButton(
                       tileLabel: '(NE) BUNDEVA',
                       tileColour: kRedColour,
-                      onPressed: () {
-                        Provider.of<NebundevaModel>(context, listen: false)
+                      onPressed: () async {
+                        await Provider.of<NebundevaModel>(context,
+                                listen: false)
                             .initializeModel(false, players);
 
                         Navigator.popAndPushNamed(context, GameScreen.id);
