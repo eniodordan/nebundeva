@@ -6,6 +6,7 @@ import 'package:nebundeva/constants.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 import 'package:nebundeva/models/bus_model.dart';
 
+import 'package:nebundeva/screens/continue_screen/continue_screen.dart';
 import 'package:nebundeva/screens/home_screen/home_screen.dart';
 import 'package:nebundeva/screens/mode_screen/mode_screen.dart';
 import 'package:nebundeva/screens/game_screen/game_screen.dart';
@@ -35,8 +36,9 @@ class Nebundeva extends StatelessWidget {
           scaffoldBackgroundColor: kBackgroundColour,
           fontFamily: 'BebasNeue',
         ),
-        initialRoute: HomeScreen.id,
+        initialRoute: ContinueScreen.id,
         routes: {
+          ContinueScreen.id: (context) => ContinueScreen(),
           HomeScreen.id: (context) => HomeScreen(),
           ModeScreen.id: (context) => ModeScreen(),
           GameScreen.id: (context) => GameScreen(),
