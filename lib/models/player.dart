@@ -1,8 +1,8 @@
 class Player {
   String playerName;
-  int bellsNumber = 0;
+  int bellsNumber;
 
-  Player({required this.playerName, bellsNumber});
+  Player({required this.playerName, required this.bellsNumber});
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(

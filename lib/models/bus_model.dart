@@ -15,8 +15,8 @@ class BusModel extends ChangeNotifier {
   List<PlayingCard> _availablePlayingCards = [];
   PlayingCard _busPlayingCard = playingCards[0];
 
-  Future<void> loadPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> initializePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _driverName = prefs.getString('driverName')!;
     _driverStage = prefs.getInt('driverStage')!;
@@ -33,7 +33,7 @@ class BusModel extends ChangeNotifier {
   }
 
   Future<void> initializeModel(Player driver) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt('gameProgress', 2);
 
@@ -77,7 +77,7 @@ class BusModel extends ChangeNotifier {
   }
 
   Future<void> refillPlayingCards() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _availablePlayingCards.clear();
     _availablePlayingCards = List.from(playingCards);
@@ -91,7 +91,7 @@ class BusModel extends ChangeNotifier {
   }
 
   Future<void> nextRandomCard() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     PlayingCard randomCard =
         _availablePlayingCards[Random().nextInt(_availablePlayingCards.length)];
@@ -111,7 +111,7 @@ class BusModel extends ChangeNotifier {
   }
 
   Future<bool> onDriverVote(int voteOption) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     PlayingCard currentCard = _busPlayingCard;
     await nextRandomCard();
 

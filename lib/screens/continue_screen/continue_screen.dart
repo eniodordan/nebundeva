@@ -42,12 +42,13 @@ class ContinueScreen extends StatelessWidget {
                       if (gameProgress == 1) {
                         await Provider.of<NebundevaModel>(context,
                                 listen: false)
-                            .loadPrefs();
+                            .initializePreference();
                         Navigator.popAndPushNamed(context, HomeScreen.id);
-                        Navigator.pushNamed(context, GameScreen.id);
+                        Navigator.pushNamed(context, GameScreen.id,
+                            arguments: false);
                       } else {
                         await Provider.of<BusModel>(context, listen: false)
-                            .loadPrefs();
+                            .initializePreference();
                         Navigator.popAndPushNamed(context, HomeScreen.id);
                         Navigator.pushNamed(context, BusScreen.id);
                       }

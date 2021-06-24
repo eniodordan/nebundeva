@@ -17,8 +17,8 @@ class NebundevaModel extends ChangeNotifier {
   List<PlayingCard> _availablePlayingCards = [];
   PlayingCard _currentPlayingCard = playingCards[0];
 
-  Future<void> loadPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> initializePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _isBundeva = prefs.getBool('isBundeva')!;
 
@@ -41,7 +41,7 @@ class NebundevaModel extends ChangeNotifier {
   }
 
   Future<void> initializeModel(bool isBundeva, List<String> playerNames) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt('gameProgress', 1);
 
@@ -50,7 +50,7 @@ class NebundevaModel extends ChangeNotifier {
 
     _players.clear();
     playerNames.forEach((playerName) {
-      _players.add(Player(playerName: playerName));
+      _players.add(Player(playerName: playerName, bellsNumber: 0));
     });
 
     List<String> players = [];
@@ -106,7 +106,7 @@ class NebundevaModel extends ChangeNotifier {
   }
 
   Future<void> moveToNextPlayer() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (_currentPlayerIndex + 1 > _players.length - 1) {
       _currentPlayerIndex = 0;
@@ -120,7 +120,7 @@ class NebundevaModel extends ChangeNotifier {
   }
 
   Future<void> nextRandomCard() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     PlayingCard randomCard =
         _availablePlayingCards[Random().nextInt(_availablePlayingCards.length)];
@@ -140,7 +140,7 @@ class NebundevaModel extends ChangeNotifier {
   }
 
   Future<void> incrementBellsNumber() async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     _players[_currentPlayerIndex].bellsNumber++;
 
     List<String> players = [];

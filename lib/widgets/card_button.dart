@@ -3,10 +3,16 @@ import 'package:flip_card/flip_card.dart';
 
 class CardButton extends StatefulWidget {
   final GlobalKey<FlipCardState>? cardKey;
+  final bool flipOnTouch;
   final Image cardImage;
   final VoidCallback onPressed;
 
-  CardButton({this.cardKey, required this.cardImage, required this.onPressed});
+  CardButton({
+    this.cardKey,
+    required this.flipOnTouch,
+    required this.cardImage,
+    required this.onPressed,
+  });
 
   @override
   _CardButtonState createState() => _CardButtonState();
@@ -28,7 +34,7 @@ class _CardButtonState extends State<CardButton> {
     return Expanded(
       child: FlipCard(
         key: widget.cardKey,
-        flipOnTouch: widget.cardKey != null ? false : _flipOnTouch,
+        flipOnTouch: widget.flipOnTouch ? _flipOnTouch : false,
         onFlip: () {
           setState(() => _flipOnTouch = false);
           widget.onPressed();

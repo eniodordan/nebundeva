@@ -42,9 +42,9 @@ class _BusScreenState extends State<BusScreen> {
 
     if (isChoiceCorrect) {
       if (viewModel.driverStage > 5) {
-        final prefs = await SharedPreferences.getInstance();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        prefs.setInt('gameProgress', 0);
+        await prefs.setInt('gameProgress', 0);
         Navigator.pop(context);
       }
       _playSound('correct_answer.mp3');
@@ -137,6 +137,7 @@ class _BusScreenState extends State<BusScreen> {
                   ),
                   CardButton(
                     cardKey: cardKey,
+                    flipOnTouch: false,
                     cardImage:
                         Image.asset(viewModel.busPlayingCard.cardImagePath),
                     onPressed: () {},

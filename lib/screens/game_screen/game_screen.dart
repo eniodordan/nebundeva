@@ -7,8 +7,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../widgets/notification_overlay.dart';
+import 'package:flip_card/flip_card.dart';
 import 'package:nebundeva/widgets/card_button.dart';
+import 'package:nebundeva/widgets/notification_overlay.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 
 class GameScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
   AudioCache audioCache = AudioCache();
   AudioPlayer? audioPlayer;
   ShakeDetector? shakeDetector;
@@ -77,12 +79,19 @@ class _GameScreenState extends State<GameScreen> {
     shakeDetector = ShakeDetector.waitForStart(
       shakeSlopTimeMS: 1000,
       onPhoneShake: () {
-        _onPlayerMove();
+        cardKey.currentState!.toggleCard();
       },
     );
     shakeDetector?.startListening();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) => _bellCheck());
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final bool isFirstTime =
+          ModalRoute.of(context)!.settings.arguments as bool;
+
+      if (isFirstTime) {
+        _bellCheck();
+      }
+    });
   }
 
   @override
@@ -148,11 +157,7 @@ class _GameScreenState extends State<GameScreen> {
                                           color: kRedColour,
                                         ),
                                       ),
-                                      onPressed: () async {
-                                        final prefs = await SharedPreferences
-                                            .getInstance();
-
-                                        prefs.setInt('gameProgress', 0);
+                                      onPressed: () {
                                         Navigator.pop(context);
                                       },
                                     ),
@@ -164,7 +169,13 @@ class _GameScreenState extends State<GameScreen> {
                                           color: kGreenColour,
                                         ),
                                       ),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+
+                                        await prefs.setInt('gameProgress', 0);
+
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
@@ -199,6 +210,8 @@ class _GameScreenState extends State<GameScreen> {
                     ],
                   ),
                   CardButton(
+                    cardKey: cardKey,
+                    flipOnTouch: true,
                     cardImage:
                         Image.asset(viewModel.currentPlayingCard.cardImagePath),
                     onPressed: _onPlayerMove,

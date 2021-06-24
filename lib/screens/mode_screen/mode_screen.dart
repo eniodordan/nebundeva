@@ -57,7 +57,8 @@ class ModeScreen extends StatelessWidget {
                                 listen: false)
                             .initializeModel(true, players);
 
-                        Navigator.popAndPushNamed(context, GameScreen.id);
+                        Navigator.popAndPushNamed(context, GameScreen.id,
+                            arguments: true);
                       },
                     ),
                     ModeButton(
@@ -68,7 +69,8 @@ class ModeScreen extends StatelessWidget {
                                 listen: false)
                             .initializeModel(false, players);
 
-                        Navigator.popAndPushNamed(context, GameScreen.id);
+                        Navigator.popAndPushNamed(context, GameScreen.id,
+                            arguments: true);
                       },
                     ),
                   ],
