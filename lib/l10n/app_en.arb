@@ -1,0 +1,21 @@
+{
+    "whoPlays": "Who plays?",
+    "start": "Start",
+    "minPlayers": "At least 2 players are required",
+    "addPlayer": "Add player +",
+    "selectMode": "Select mode",
+    "drinks": "DRINKS",
+    "skips": "SKIPS",
+    "restartGame": "Are you sure you want to reset the game?",
+    "yes": "YES",
+    "no": "NO",
+    "bellsNumber": "Bells",
+    "nextPlayer": "Next",
+    "cardsLeft": "Cards left",
+    "stage": "Stage",
+    "cards": "Cards",
+    "selects": " selects",
+    "scoreboard": "Scoreboard",
+    "playerName": "Player name",
+    "rideTheBus": "Ride the Bus"
+}

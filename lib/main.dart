@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:nebundeva/models/nebundeva_model.dart';
 import 'package:nebundeva/models/bus_model.dart';
 
@@ -35,6 +38,16 @@ class Nebundeva extends StatelessWidget {
           scaffoldBackgroundColor: kBackgroundColour,
           fontFamily: 'BebasNeue',
         ),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          AppLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale('en', ''),
+          Locale('hr', ''),
+        ],
         initialRoute: HomeScreen.id,
         routes: {
           HomeScreen.id: (context) => HomeScreen(),

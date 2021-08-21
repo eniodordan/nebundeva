@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'widgets/add_player_button.dart';
 import 'package:nebundeva/widgets/action_button.dart';
 import 'package:nebundeva/screens/mode_screen/mode_screen.dart';
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(
-                            'Tko igra?',
+                            AppLocalizations.of(context)!.whoPlays,
                             style: TextStyle(fontSize: 36),
                           ),
                         ),
@@ -82,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     ActionButton(
-                      buttonText: 'Započni',
+                      buttonText: AppLocalizations.of(context)!.start,
                       textColour: kBackgroundColour,
                       buttonColour: Colors.white,
                       onPressed: () {
@@ -95,13 +97,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
 
                         if (players.length >= 2) {
-                          Navigator.pushNamed(context, ModeScreen.id,
-                              arguments: players);
+                          Navigator.pushNamed(context, ModeScreen.id, arguments: players);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'Potrebna su najmanje 2 igrača',
+                                AppLocalizations.of(context)!.minPlayers,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: 'BebasNeue',

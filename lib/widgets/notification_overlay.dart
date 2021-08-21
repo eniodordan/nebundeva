@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class NotificationOverlay extends ModalRoute<void> {
   final bool isPunishment;
   final String playerName;
@@ -17,8 +19,7 @@ class NotificationOverlay extends ModalRoute<void> {
   bool get barrierDismissible => false;
 
   @override
-  Color get barrierColor =>
-      (isPunishment ? kRedColour : kGreenColour).withOpacity(0.9);
+  Color get barrierColor => (isPunishment ? kRedColour : kGreenColour).withOpacity(0.9);
 
   @override
   String? get barrierLabel => null;
@@ -57,7 +58,9 @@ class NotificationOverlay extends ModalRoute<void> {
                   style: TextStyle(fontSize: 84),
                 ),
                 Text(
-                  isPunishment ? 'PIJE' : 'NE PIJE',
+                  isPunishment
+                      ? AppLocalizations.of(context)!.drinks
+                      : AppLocalizations.of(context)!.skips,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 84),
                 ),

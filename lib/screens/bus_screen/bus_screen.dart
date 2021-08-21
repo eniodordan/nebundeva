@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/bus_model.dart';
 
@@ -73,7 +75,7 @@ class _BusScreenState extends State<BusScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Razina: ',
+                            '${AppLocalizations.of(context)!.stage}: ',
                             style: TextStyle(
                               color: kGreyColour,
                               fontSize: 32,
@@ -101,7 +103,7 @@ class _BusScreenState extends State<BusScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Karte: ',
+                            '${AppLocalizations.of(context)!.cards}: ',
                             style: TextStyle(
                               color: kGreyColour,
                               fontSize: 32,
@@ -146,7 +148,7 @@ class _BusScreenState extends State<BusScreen> {
                             ),
                           ),
                           Text(
-                            ' bira',
+                            AppLocalizations.of(context)!.selects,
                             style: TextStyle(
                               color: kLightGreyColour,
                               fontSize: 28,

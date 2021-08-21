@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:nebundeva/models/bus_model.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
 
@@ -41,7 +43,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                   Column(
                     children: [
                       Text(
-                        'Poredak igrača',
+                        AppLocalizations.of(context)!.scoreboard,
                         style: TextStyle(
                           fontSize: 28,
                         ),
@@ -53,14 +55,14 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                'Ime igrača',
+                                AppLocalizations.of(context)!.playerName,
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: kLightGreyColour,
                                 ),
                               ),
                               Text(
-                                'Broj bundevi',
+                                AppLocalizations.of(context)!.bellsNumber,
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: kLightGreyColour,
@@ -84,7 +86,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                     ],
                   ),
                   ActionButton(
-                    buttonText: 'Bus',
+                    buttonText: AppLocalizations.of(context)!.rideTheBus,
                     textColour: Colors.white,
                     buttonColour: kRedColour,
                     onPressed: () {

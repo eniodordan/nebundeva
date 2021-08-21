@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AddPlayerButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -15,7 +17,7 @@ class AddPlayerButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           child: Text(
-            'Dodaj igrača +',
+            AppLocalizations.of(context)!.addPlayer,
             style: TextStyle(
               color: kBackgroundColour,
               fontSize: 16,

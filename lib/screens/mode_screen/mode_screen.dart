@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:nebundeva/models/nebundeva_model.dart';
 
 import 'widgets/mode_button.dart';
@@ -34,7 +36,7 @@ class ModeScreen extends StatelessWidget {
                     },
                   ),
                   Text(
-                    'Odaberi način',
+                    AppLocalizations.of(context)!.selectMode,
                     style: TextStyle(
                       fontSize: 24,
                       color: kGreyColour,

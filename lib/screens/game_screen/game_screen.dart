@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:shake/shake.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
@@ -50,7 +52,11 @@ class _GameScreenState extends State<GameScreen> {
 
       shakeDetector?.stopListening();
       _showOverlay(context);
-      if (viewModel.isBundeva) _playSound('can_opener.mp3');
+      if (viewModel.isBundeva) {
+        _playSound('can_opener.mp3');
+      } else {
+        _playSound('aww.mp3');
+      }
     }
   }
 
@@ -115,8 +121,8 @@ class _GameScreenState extends State<GameScreen> {
                           Text(
                             (viewModel.isBundeva && viewModel.currentPlayingCard.isBell) ||
                                     (!viewModel.isBundeva && !viewModel.currentPlayingCard.isBell)
-                                ? '${viewModel.currentPlayer.playerName} PIJE'
-                                : '${viewModel.currentPlayer.playerName} NE PIJE',
+                                ? '${viewModel.currentPlayer.playerName} ${AppLocalizations.of(context)!.drinks}'
+                                : '${viewModel.currentPlayer.playerName} ${AppLocalizations.of(context)!.skips}',
                             style: TextStyle(
                               color: (viewModel.isBundeva && viewModel.currentPlayingCard.isBell) ||
                                       (!viewModel.isBundeva && !viewModel.currentPlayingCard.isBell)
@@ -136,7 +142,7 @@ class _GameScreenState extends State<GameScreen> {
                                 context: context,
                                 builder: (_) => AlertDialog(
                                   content: Text(
-                                    'Jeste li sigurni da želite započeti igru iz početka?',
+                                    AppLocalizations.of(context)!.restartGame,
                                     style: TextStyle(
                                       fontSize: 18,
                                     ),
@@ -144,7 +150,7 @@ class _GameScreenState extends State<GameScreen> {
                                   actions: [
                                     TextButton(
                                       child: Text(
-                                        'NE',
+                                        AppLocalizations.of(context)!.no,
                                         style: TextStyle(
                                           fontSize: 18,
                                           color: kRedColour,
@@ -156,7 +162,7 @@ class _GameScreenState extends State<GameScreen> {
                                     ),
                                     TextButton(
                                       child: Text(
-                                        'DA',
+                                        AppLocalizations.of(context)!.yes,
                                         style: TextStyle(
                                           fontSize: 18,
                                           color: kGreenColour,
@@ -179,7 +185,7 @@ class _GameScreenState extends State<GameScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Broj bundevi: ',
+                            '${AppLocalizations.of(context)!.bellsNumber}: ',
                             style: TextStyle(
                               color: kLightGreyColour,
                               fontSize: 24,
@@ -208,7 +214,7 @@ class _GameScreenState extends State<GameScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Sljedeći: ',
+                            '${AppLocalizations.of(context)!.nextPlayer}: ',
                             style: TextStyle(
                               color: kLightGreyColour,
                               fontSize: 42,
@@ -228,7 +234,7 @@ class _GameScreenState extends State<GameScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Karata preostalo: ',
+                            '${AppLocalizations.of(context)!.cardsLeft}: ',
                             style: TextStyle(
                               color: kGreyColour,
                               fontSize: 24,
