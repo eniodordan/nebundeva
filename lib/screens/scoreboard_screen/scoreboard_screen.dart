@@ -87,8 +87,8 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                     buttonText: 'Bus',
                     textColour: Colors.white,
                     buttonColour: kRedColour,
-                    onPressed: () async {
-                      await Provider.of<BusModel>(context, listen: false)
+                    onPressed: () {
+                      Provider.of<BusModel>(context, listen: false)
                           .initializeModel(viewModel.players[0]);
 
                       Navigator.popAndPushNamed(context, BusScreen.id);

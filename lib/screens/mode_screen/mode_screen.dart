@@ -12,8 +12,7 @@ class ModeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> players =
-        ModalRoute.of(context)!.settings.arguments as List<String>;
+    final List<String> players = ModalRoute.of(context)!.settings.arguments as List<String>;
 
     return Scaffold(
       body: SafeArea(
@@ -52,25 +51,21 @@ class ModeScreen extends StatelessWidget {
                     ModeButton(
                       tileLabel: 'BUNDEVA',
                       tileColour: kGreenColour,
-                      onPressed: () async {
-                        await Provider.of<NebundevaModel>(context,
-                                listen: false)
+                      onPressed: () {
+                        Provider.of<NebundevaModel>(context, listen: false)
                             .initializeModel(true, players);
 
-                        Navigator.popAndPushNamed(context, GameScreen.id,
-                            arguments: true);
+                        Navigator.popAndPushNamed(context, GameScreen.id, arguments: true);
                       },
                     ),
                     ModeButton(
                       tileLabel: '(NE) BUNDEVA',
                       tileColour: kRedColour,
-                      onPressed: () async {
-                        await Provider.of<NebundevaModel>(context,
-                                listen: false)
+                      onPressed: () {
+                        Provider.of<NebundevaModel>(context, listen: false)
                             .initializeModel(false, players);
 
-                        Navigator.popAndPushNamed(context, GameScreen.id,
-                            arguments: true);
+                        Navigator.popAndPushNamed(context, GameScreen.id, arguments: true);
                       },
                     ),
                   ],

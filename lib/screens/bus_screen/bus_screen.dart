@@ -4,7 +4,6 @@ import 'package:nebundeva/constants.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/bus_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/vote_button.dart';
 import 'package:flip_card/flip_card.dart';
@@ -36,24 +35,19 @@ class _BusScreenState extends State<BusScreen> {
     audioPlayer = await audioCache.play(localPath);
   }
 
-  void _processVote(int voteOption) async {
+  void _processVote(int voteOption) {
     final viewModel = Provider.of<BusModel>(context, listen: false);
-    bool isChoiceCorrect = await viewModel.onDriverVote(voteOption);
+    bool isChoiceCorrect = viewModel.onDriverVote(voteOption);
 
     if (isChoiceCorrect) {
-      if (viewModel.driverStage > 5) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-
-        await prefs.setInt('gameProgress', 0);
-        Navigator.pop(context);
-      }
+      if (viewModel.driverStage > 5) Navigator.pop(context);
       _playSound('correct_answer.mp3');
     } else {
       _showOverlay(context);
       _playSound('wrong_answer.mp3');
     }
 
-    if (viewModel.playingCardsCount == 0) await viewModel.refillPlayingCards();
+    if (viewModel.playingCardsCount == 0) viewModel.refillPlayingCards();
 
     cardKey.currentState!.toggleCard();
   }
@@ -90,8 +84,7 @@ class _BusScreenState extends State<BusScreen> {
                             children: [
                               Text(
                                 '${viewModel.driverStage}',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 36),
+                                style: TextStyle(color: Colors.white, fontSize: 36),
                               ),
                               Text(
                                 '/5',
@@ -119,8 +112,7 @@ class _BusScreenState extends State<BusScreen> {
                             children: [
                               Text(
                                 '${viewModel.playingCardsCount}',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 36),
+                                style: TextStyle(color: Colors.white, fontSize: 36),
                               ),
                               Text(
                                 '/32',
@@ -138,8 +130,7 @@ class _BusScreenState extends State<BusScreen> {
                   CardButton(
                     cardKey: cardKey,
                     flipOnTouch: false,
-                    cardImage:
-                        Image.asset(viewModel.busPlayingCard.cardImagePath),
+                    cardImage: Image.asset(viewModel.busPlayingCard.cardImagePath),
                     onPressed: () {},
                   ),
                   Column(

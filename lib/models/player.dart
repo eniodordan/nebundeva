@@ -3,18 +3,4 @@ class Player {
   int bellsNumber;
 
   Player({required this.playerName, required this.bellsNumber});
-
-  factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(
-      playerName: json['playerName'],
-      bellsNumber: json['bellsNumber'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['playerName'] = this.playerName;
-    data['bellsNumber'] = this.bellsNumber;
-    return data;
-  }
 }

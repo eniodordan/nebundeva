@@ -5,7 +5,6 @@ import 'package:nebundeva/constants.dart';
 import 'package:shake/shake.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:nebundeva/models/nebundeva_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flip_card/flip_card.dart';
 import 'package:nebundeva/widgets/card_button.dart';
@@ -55,12 +54,12 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  void _onPlayerMove() async {
+  void _onPlayerMove() {
     final viewModel = Provider.of<NebundevaModel>(context, listen: false);
 
     if (viewModel.playingCardsCount > 0) {
-      await viewModel.moveToNextPlayer();
-      await viewModel.nextRandomCard();
+      viewModel.moveToNextPlayer();
+      viewModel.nextRandomCard();
       _bellCheck();
     } else {
       if (!viewModel.isBundeva) {
@@ -85,8 +84,7 @@ class _GameScreenState extends State<GameScreen> {
     shakeDetector?.startListening();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      final bool isFirstTime =
-          ModalRoute.of(context)!.settings.arguments as bool;
+      final bool isFirstTime = ModalRoute.of(context)!.settings.arguments as bool;
 
       if (isFirstTime) {
         _bellCheck();
@@ -115,18 +113,13 @@ class _GameScreenState extends State<GameScreen> {
                         children: [
                           Container(width: 32),
                           Text(
-                            (viewModel.isBundeva &&
-                                        viewModel.currentPlayingCard.isBell) ||
-                                    (!viewModel.isBundeva &&
-                                        !viewModel.currentPlayingCard.isBell)
+                            (viewModel.isBundeva && viewModel.currentPlayingCard.isBell) ||
+                                    (!viewModel.isBundeva && !viewModel.currentPlayingCard.isBell)
                                 ? '${viewModel.currentPlayer.playerName} PIJE'
                                 : '${viewModel.currentPlayer.playerName} NE PIJE',
                             style: TextStyle(
-                              color: (viewModel.isBundeva &&
-                                          viewModel
-                                              .currentPlayingCard.isBell) ||
-                                      (!viewModel.isBundeva &&
-                                          !viewModel.currentPlayingCard.isBell)
+                              color: (viewModel.isBundeva && viewModel.currentPlayingCard.isBell) ||
+                                      (!viewModel.isBundeva && !viewModel.currentPlayingCard.isBell)
                                   ? kRedColour
                                   : kGreenColour,
                               fontSize: 36,
@@ -169,13 +162,7 @@ class _GameScreenState extends State<GameScreen> {
                                           color: kGreenColour,
                                         ),
                                       ),
-                                      onPressed: () async {
-                                        SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
-
-                                        await prefs.setInt('gameProgress', 0);
-
+                                      onPressed: () {
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
@@ -212,8 +199,7 @@ class _GameScreenState extends State<GameScreen> {
                   CardButton(
                     cardKey: cardKey,
                     flipOnTouch: true,
-                    cardImage:
-                        Image.asset(viewModel.currentPlayingCard.cardImagePath),
+                    cardImage: Image.asset(viewModel.currentPlayingCard.cardImagePath),
                     onPressed: _onPlayerMove,
                   ),
                   Column(

@@ -1,5 +1,3 @@
-// import 'dart:convert';
-
 class PlayingCard {
   bool isBell;
   int cardValue;
@@ -10,22 +8,6 @@ class PlayingCard {
     required this.cardValue,
     required this.cardImagePath,
   });
-
-  factory PlayingCard.fromJson(Map<String, dynamic> json) {
-    return PlayingCard(
-      isBell: json['isBell'],
-      cardValue: json['cardValue'],
-      cardImagePath: json['cardImage'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['isBell'] = this.isBell;
-    data['cardValue'] = this.cardValue;
-    data['cardImage'] = this.cardImagePath;
-    return data;
-  }
 }
 
 final List<PlayingCard> playingCards = [
