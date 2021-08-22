@@ -17,7 +17,7 @@ class AddPlayerButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           child: Text(
-            AppLocalizations.of(context)!.addPlayer,
+            '${AppLocalizations.of(context)!.addPlayer} +',
             style: TextStyle(
               color: kBackgroundColour,
               fontSize: 16,

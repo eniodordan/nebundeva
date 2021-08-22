@@ -13,6 +13,8 @@ import 'package:nebundeva/widgets/card_button.dart';
 import 'package:nebundeva/widgets/notification_overlay.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 class GameScreen extends StatefulWidget {
   static const String id = 'game_screen';
 
@@ -25,6 +27,43 @@ class _GameScreenState extends State<GameScreen> {
   AudioCache audioCache = AudioCache();
   AudioPlayer? audioPlayer;
   ShakeDetector? shakeDetector;
+
+  static final AdRequest request = AdRequest();
+
+  InterstitialAd? _interstitialAd;
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: 'ca-app-pub-7328549469833873/4735361597',
+        request: request,
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            _interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            _interstitialAd = null;
+            _createInterstitialAd();
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
 
   void _playSound(String localPath) async {
     await audioPlayer?.stop();
@@ -74,6 +113,7 @@ class _GameScreenState extends State<GameScreen> {
       } else {
         Navigator.pop(context);
       }
+      _showInterstitialAd();
     }
   }
 
@@ -81,12 +121,15 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
+    _createInterstitialAd();
+
     shakeDetector = ShakeDetector.waitForStart(
       shakeSlopTimeMS: 1000,
       onPhoneShake: () {
         cardKey.currentState!.toggleCard();
       },
     );
+
     shakeDetector?.startListening();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -171,6 +214,7 @@ class _GameScreenState extends State<GameScreen> {
                                       onPressed: () {
                                         Navigator.pop(context);
                                         Navigator.pop(context);
+                                        _showInterstitialAd();
                                       },
                                     ),
                                   ],

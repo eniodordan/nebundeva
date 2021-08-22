@@ -14,8 +14,15 @@ import 'package:nebundeva/screens/mode_screen/mode_screen.dart';
 import 'package:nebundeva/screens/game_screen/game_screen.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 import 'package:nebundeva/screens/bus_screen/bus_screen.dart';
+import 'screens/settings_screen/settings_screen.dart';
 
-void main() => runApp(Nebundeva());
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  runApp(Nebundeva());
+}
 
 class Nebundeva extends StatelessWidget {
   @override
@@ -55,6 +62,7 @@ class Nebundeva extends StatelessWidget {
           GameScreen.id: (context) => GameScreen(),
           ScoreboardScreen.id: (context) => ScoreboardScreen(),
           BusScreen.id: (context) => BusScreen(),
+          SettingsScreen.id: (context) => SettingsScreen(),
         },
       ),
     );

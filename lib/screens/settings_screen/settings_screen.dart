@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:nebundeva/constants.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:nebundeva/models/nebundeva_model.dart';
-
-import 'widgets/mode_button.dart';
-import 'package:nebundeva/screens/game_screen/game_screen.dart';
-
-class ModeScreen extends StatelessWidget {
-  static const String id = 'mode_screen';
+class SettingsScreen extends StatelessWidget {
+  static const String id = 'settings_screen';
 
   @override
   Widget build(BuildContext context) {
-    final List<String> players = ModalRoute.of(context)!.settings.arguments as List<String>;
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -47,28 +39,7 @@ class ModeScreen extends StatelessWidget {
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ModeButton(
-                      tileLabel: 'BUNDEVA',
-                      tileColour: kGreenColour,
-                      onPressed: () {
-                        Provider.of<NebundevaModel>(context, listen: false)
-                            .initializeModel(true, players);
-
-                        Navigator.popAndPushNamed(context, GameScreen.id, arguments: true);
-                      },
-                    ),
-                    ModeButton(
-                      tileLabel: '(NE) BUNDEVA',
-                      tileColour: kRedColour,
-                      onPressed: () {
-                        Provider.of<NebundevaModel>(context, listen: false)
-                            .initializeModel(false, players);
-
-                        Navigator.popAndPushNamed(context, GameScreen.id, arguments: true);
-                      },
-                    ),
-                  ],
+                  children: [],
                 ),
               ),
             ],
