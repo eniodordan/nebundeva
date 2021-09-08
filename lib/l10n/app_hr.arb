@@ -1,0 +1,21 @@
+{
+    "whoPlays": "Tko igra?",
+    "start": "Započni",
+    "minPlayers": "Potrebna su najmanje 2 igrača",
+    "addPlayer": "Dodaj igrača",
+    "selectMode": "Odaberi način",
+    "drinks": "PIJE",
+    "skips": "NE PIJE",
+    "restartGame": "Jeste li sigurni da želite napustiti igru?",
+    "yes": "Da",
+    "no": "Ne",
+    "bellsNumber": "Broj bundevi",
+    "nextPlayer": "Sljedeći",
+    "cardsLeft": "Karata preostalo",
+    "stage": "Razina",
+    "cards": "Karte",
+    "selects": " odabire",
+    "scoreboard": "Poredak igrača",
+    "playerName": "Ime igrača",
+    "rideTheBus": "Bus"
+}
