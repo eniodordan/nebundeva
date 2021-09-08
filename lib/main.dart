@@ -14,7 +14,6 @@ import 'package:nebundeva/screens/mode_screen/mode_screen.dart';
 import 'package:nebundeva/screens/game_screen/game_screen.dart';
 import 'package:nebundeva/screens/scoreboard_screen/scoreboard_screen.dart';
 import 'package:nebundeva/screens/bus_screen/bus_screen.dart';
-import 'screens/settings_screen/settings_screen.dart';
 
 void main() => runApp(Nebundeva());
 
@@ -46,7 +45,6 @@ class Nebundeva extends StatelessWidget {
           AppLocalizations.delegate,
         ],
         supportedLocales: [
-          Locale('en', ''),
           Locale('hr', ''),
         ],
         initialRoute: HomeScreen.id,
@@ -56,7 +54,6 @@ class Nebundeva extends StatelessWidget {
           GameScreen.id: (context) => GameScreen(),
           ScoreboardScreen.id: (context) => ScoreboardScreen(),
           BusScreen.id: (context) => BusScreen(),
-          SettingsScreen.id: (context) => SettingsScreen(),
         },
       ),
     );
